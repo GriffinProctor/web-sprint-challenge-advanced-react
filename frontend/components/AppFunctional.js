@@ -77,9 +77,30 @@ export default function AppFunctional(props) {
     setEmail(evt.target.value)
   }
 
-  function onSubmit(evt) {
+   async function onSubmit(evt) {
     // Use a POST request to send a payload to the server.
     evt.preventDefault()
+
+    try {
+      const {x, y} = getXY()
+      const response = await fetch('http://localhost:9000/api/result', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          x: x + 1,
+          y: y + 1,
+          steps,
+          email,
+        }),
+      })
+      const data = await response.json()
+      setMessage(data.message || '')
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setMessage('Error submitting form')
+    }
     
   }
 
@@ -108,7 +129,7 @@ export default function AppFunctional(props) {
         <button id="down" onClick={() => move('down')}>DOWN</button>
         <button id="reset" onClick={reset}>reset</button>
       </div>
-      <form>
+      <form onSubmit={onSubmit}>
         <input id="email" type="email" placeholder="type email" value={email} onChange={onChange}></input>
         <input id="submit" type="submit"></input>
       </form>
