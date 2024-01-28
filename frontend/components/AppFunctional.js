@@ -68,8 +68,13 @@ export default function AppFunctional(props) {
     // This event handler can use the helper above to obtain a new index for the "B",
     // and change any states accordingly.
     const nextIndex = getNextIndex(direction)
-    setSteps(steps + 1)
+    if (nextIndex !== currentIndex) {
+      setSteps(steps + 1)
     setCurrentIndex(nextIndex)
+    } else {
+      setMessage(`You can't go ${direction}`)
+    }
+    
   }
 
   function onChange(evt) {
