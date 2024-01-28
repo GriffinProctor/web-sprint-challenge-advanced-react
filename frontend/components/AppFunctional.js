@@ -106,7 +106,7 @@ export default function AppFunctional(props) {
       console.error('Error submitting form:', error);
       setMessage('Error submitting form')
     }
-    
+    setEmail(initialEmail)
   }
 
   return (
