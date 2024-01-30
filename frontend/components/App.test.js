@@ -44,11 +44,9 @@ test('clicking on movement button triggers the corresponding move function', () 
   render(<AppFunctional />);
   const leftButton = screen.getByText(/LEFT/i);
 
-  const initialSteps = screen.getByText(/You moved 0 time/i);
+  const stepsElement = screen.getByText(/You moved 0 time/i);
 
   fireEvent.click(leftButton);
 
-  const updatedSteps = screen.getByText(/You moved 1 time/i);
-
-  expect(initialSteps).not.toEqual(updatedSteps);
+  expect(stepsElement).toHaveTextContent('You moved 1 time');
 });
