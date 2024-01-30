@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect'; // Import this for custom matchers
+import '@testing-library/jest-dom/extend-expect';
 
 import AppFunctional from './AppFunctional';
 
@@ -9,16 +9,16 @@ describe('AppFunctional Component', () => {
     render(<AppFunctional />);
     expect(screen.getByText(/Coordinates/i)).toBeInTheDocument();
     expect(screen.getByText(/You moved/i)).toBeInTheDocument();
-    expect(screen.getByText(/type email/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/type email/i)).toBeInTheDocument();
   });
 
-  test('moves "B" to the right on RIGHT button click', () => {
+  test('moves "B" to the right on RIGHT button click', async () => {
     render(<AppFunctional />);
     const initialCoordinates = screen.getByText(/Coordinates \(2, 2\)/i);
 
-    fireEvent.click(screen.getByText('RIGHT'));
+    await fireEvent.click(screen.getByText('RIGHT'));
 
-    const updatedCoordinates = screen.getByText(/Coordinates \(3, 2\)/i);
+    const updatedCoordinates = screen.queryByText(/Coordinates \(3, 2\)/i);
     expect(updatedCoordinates).toBeInTheDocument();
     expect(initialCoordinates).not.toBeInTheDocument();
   });
@@ -40,14 +40,13 @@ describe('AppFunctional Component', () => {
     expect(stepsMessage).toBeInTheDocument();
   });
 
-  test('submits the form and displays success message', async () => {
+  test('submitting resets the email input', async () => {
     render(<AppFunctional />);
-    fireEvent.click(screen.getByText('DOWN')); // Move to trigger API call
     fireEvent.change(screen.getByPlaceholderText(/type email/i), { target: { value: 'lady@gaga.com' } });
     fireEvent.click(screen.getByText('Submit'));
 
-    // Assuming the success message is "lady win #43" (update based on your actual success message)
     await screen.findByText(/lady win #43/i);
-    expect(screen.getByText(/lady win #43/i)).toBeInTheDocument();
+
+    expect(screen.getByPlaceholderText(/type email/i).value).toBe('');
   });
-});
+})
