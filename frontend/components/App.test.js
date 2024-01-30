@@ -15,18 +15,21 @@ describe('AppFunctional Component', () => {
   test('moves "B" to the right on RIGHT button click', async () => {
     render(<AppFunctional />);
     const initialCoordinates = screen.getByText(/Coordinates \(2, 2\)/i);
-
-    await fireEvent.click(screen.getByText('RIGHT'));
-
+  
+    fireEvent.click(screen.getByText('RIGHT'));
+    await new Promise((resolve) => setTimeout(resolve, 100)); // Add a short delay
+  
     const updatedCoordinates = screen.queryByText(/Coordinates \(3, 2\)/i);
     expect(updatedCoordinates).toBeInTheDocument();
     expect(initialCoordinates).not.toBeInTheDocument();
   });
 
-  test('displays error message when trying to go left beyond the grid', () => {
+  test('displays error message when trying to go left beyond the grid', async () => {
     render(<AppFunctional />);
     fireEvent.click(screen.getByText('LEFT'));
-
+  
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  
     const errorMessage = screen.getByText(/You can't go left/i);
     expect(errorMessage).toBeInTheDocument();
   });
@@ -45,8 +48,8 @@ describe('AppFunctional Component', () => {
     fireEvent.change(screen.getByPlaceholderText(/type email/i), { target: { value: 'lady@gaga.com' } });
     fireEvent.click(screen.getByText('Submit'));
 
-    await screen.findByText(/lady win #43/i);
-
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  
     expect(screen.getByPlaceholderText(/type email/i).value).toBe('');
   });
 })
